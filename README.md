@@ -1,0 +1,21 @@
+# FIP Telegram Bot
+
+A Telegram bot to share your love of FIP
+
+## Env variables
+
+- **BOT_TELEGRAM_TOKEN**: the token for the bot
+- **FIP_API_HOST** and **FIP_API_PORT** : for the RadioFrance/FIP service
+- **SPOTIFY_API_HOST** and **SPOTIFY_API_PORT**: for the Spotify API service
+
+## Local development
+
+You can run locally with `make dev`
+
+You can build the *Docker* image with `make build` and then run it with `make run`.
+
+## Create k8s secret
+
+Add your BOT_TELEGRAM_TOKEN token into your `.env` file for development (**don't commit this file**).
+
+Then you can create the secret with `kubectl create secret generic spotify-api-access --from-env-file=.env`.

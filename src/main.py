@@ -11,6 +11,7 @@ from src.utils import dict_to_simple_song
 from src.fmt import song_to_markdown
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
 
 BOT_TELEGRAM_TOKEN = os.getenv("BOT_TELEGRAM_TOKEN")
 
@@ -20,8 +21,8 @@ def get_live(update, context):
     try:
 
         # get the song from FIP
-        # song = get_live_on_FIP()
-        song = dict_to_simple_song({"title": "Mango meat", "artist": "Mandrill"})
+        song = get_live_on_FIP()
+        # song = dict_to_simple_song({"title": "Mango meat", "artist": "Mandrill"})
         update.message.reply_markdown_v2(song_to_markdown(song), disable_web_page_preview=True)
 
         # search the song on spotify
