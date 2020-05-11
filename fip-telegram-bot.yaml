@@ -25,7 +25,7 @@ spec:
         envFrom:
         - secretRef:
             name: fip-telegram-bot
-        image: dixneuf19/fip-telegram-bot:4461ccf
+        image: dixneuf19/fip-telegram-bot:7ed0cd3
         resources:
           limits:
             memory: "128Mi"
