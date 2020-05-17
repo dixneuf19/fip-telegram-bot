@@ -2,6 +2,7 @@ import os
 import logging
 
 from telegram.ext import Updater, CommandHandler
+from telegram.utils.helpers import escape_markdown
 from telegram import ParseMode
 from dotenv import load_dotenv
 
@@ -52,14 +53,14 @@ def get_live(update, context):
     except LiveFIPException:
          context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=song_to_markdown("The FIP API cannot inform us about the live, is it _Club Jazzafip_ ?"),
+            text=escape_markdown("The FIP API cannot inform us about the live, is it _Club Jazzafip_ ?"),
             parse_mode=ParseMode.MARKDOWN_V2,
             )
     except Exception as e:
         logging.error(e)
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=song_to_markdown("Hum something went wrong..."),
+            text=escape_markdown("Hum something went wrong..."),
             )
 
 def display_help(update, context):
