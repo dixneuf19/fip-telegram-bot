@@ -60,7 +60,7 @@ def get_live(update, context):
         logging.error(e)
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=escape_markdown("Hum something went wrong..."),
+            text="Hum something went wrong...",
             )
 
 def display_help(update, context):
