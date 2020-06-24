@@ -1,0 +1,42 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+container:
+  replicaCount: 1
+
+  image:
+    repository: dixneuf19/fip-telegram-bot
+    tag: latest
+    pullPolicy: Always
+
+  port: 80
+
+  resources:
+    limits:
+      memory: '128Mi'
+      cpu: '300m'
+    requests:
+      memory: '64Mi'
+      cpu: '100m'
+
+  # probe:
+  #   path: /health
+
+# service:
+#   type: ClusterIP
+#   port: 1919
+
+ingress:
+  enabled: false
+  annotations: []
+  host: ""
+  path: ""
+
+configmap: 
+ - FIP_API_HOST: "whats-on-fip"
+ - FIP_API_PORT: 1919
+ - SPOTIFY_API_HOST: "spotify-api"
+ - SPOTIFY_API_PORT: 1919
+
+secrets:
+  BOT_TELEGRAM_TOKEN: "fip-telegram-bot"

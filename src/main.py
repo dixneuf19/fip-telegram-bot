@@ -49,7 +49,6 @@ def get_live(update, context):
             text=spot_txt,
             )
         
-        logging.warning(spotify_track)
     except LiveFIPException:
          context.bot.send_message(
             chat_id=update.effective_chat.id,
