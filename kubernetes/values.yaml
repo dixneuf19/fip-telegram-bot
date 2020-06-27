@@ -33,10 +33,10 @@ ingress:
   path: ""
 
 configmap: 
- - FIP_API_HOST: "whats-on-fip"
- - FIP_API_PORT: 1919
- - SPOTIFY_API_HOST: "spotify-api"
- - SPOTIFY_API_PORT: 1919
+ FIP_API_HOST: "whats-on-fip"
+ FIP_API_PORT: 1919
+ SPOTIFY_API_HOST: "spotify-api"
+ SPOTIFY_API_PORT: 1919
 
 secrets:
   BOT_TELEGRAM_TOKEN: "fip-telegram-bot"
