@@ -97,4 +97,4 @@ jobs:
       # deploy helm release
       - name: Deploy Helm release
         run: |
-          helm upgrade --kubeconfig kubeconfig.yml --wait -i $HELM_RELEASE_NAME kubernetes/ --set container.image.tag=${GITHUB_SHA::7}
+          helm upgrade -i --kubeconfig kubeconfig.yml --wait $HELM_RELEASE_NAME kubernetes/ --set container.image.tag=${GITHUB_SHA::7}
