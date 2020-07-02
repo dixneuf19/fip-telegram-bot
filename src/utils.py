@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any
 
-from src.models import SimpleSong, Artist, Image, Album, Track
+from src.models import SimpleSong, Artist, Image, Album, Track, Station
 
 def dict_to_simple_song(obj: Dict[str, Any]) -> SimpleSong:
     try:
@@ -55,6 +55,15 @@ def dict_to_artist(obj: Dict[str,Any]) -> Artist:
     try:
         return Artist(
             id=obj["id"], href=obj["href"], name=obj["name"], uri=obj["uri"],
+        )
+    except KeyError:
+        return None
+
+
+def dict_to_station(obj: Dict[str, Any]) -> Station:
+    try:
+        return Station(
+            name=obj["name"]
         )
     except KeyError:
         return None

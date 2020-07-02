@@ -44,3 +44,7 @@ class Track:
     preview_url: str
     uri: str
     name: str
+
+@dataclass
+class Station:
+    name: str

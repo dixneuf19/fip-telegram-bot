@@ -3,10 +3,10 @@ import logging
 import requests
 from requests import codes
 from dotenv import load_dotenv
-from typing import Union
+from typing import Union, List
 
-from src.models import SimpleSong, Track
-from src.utils import dict_to_track, dict_to_simple_song
+from src.models import SimpleSong, Track, Station
+from src.utils import dict_to_track, dict_to_simple_song, dict_to_station
 
 load_dotenv()
 
@@ -31,6 +31,27 @@ def get_live_on_FIP() -> SimpleSong:
         raise LiveFIPException()
         
     r.raise_for_status()
+
+def get_live_on_station(station_name: str) -> SimpleSong:
+    service_address = f"http://{FIP_API_HOST}:{FIP_API_PORT}/live?station={station_name}"
+    logging.info(f"Fetching live info from {service_address}")
+    r = requests.get(service_address)
+    if r.status_code == codes.ok:
+        return dict_to_simple_song(r.json())
+    elif r.status_code == codes.no_content:
+        logging.warning(f"Radio France API is up but is unable to fetch the live")
+        raise LiveFIPException()
+        
+    r.raise_for_status()
+
+def get_radio_france_stations() -> List[Station]:
+    service_address = f"http://{FIP_API_HOST}:{FIP_API_PORT}/stations"
+    logging.info(f"Fetching Radio France stations from {service_address}")
+    r = requests.get(service_address)
+    if r.status_code == codes.ok:
+        return [dict_to_station(e) for e in r.json()]
+    else:        
+        r.raise_for_status()
 
 def search_on_spotify(query: str) -> Union[SimpleSong, None]:
     logging.info(f"search for '{query}' on Spotify API")
