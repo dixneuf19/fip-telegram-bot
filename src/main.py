@@ -11,6 +11,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 
 BOT_TELEGRAM_TOKEN = os.getenv("BOT_TELEGRAM_TOKEN")
+BOT_WEBHOOK_PATH = os.getenv("BOT_WEBHOOK_PATH")
 
 
 def display_help(update, context):
@@ -40,6 +41,6 @@ updater.dispatcher.add_handler(unknown_handler)
 # add handlers
 updater.start_webhook(listen="0.0.0.0",
                       port=80   ,
-                      url_path="")
-updater.bot.set_webhook("https://fip-telegram-bot.dixneuf19.me/")
+                      url_path=BOT_WEBHOOK_PATH)
+updater.bot.set_webhook(f"https://fip-telegram-bot.dixneuf19.me/{BOT_WEBHOOK_PATH}")
 updater.idle()

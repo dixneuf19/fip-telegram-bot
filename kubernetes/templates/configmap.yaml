@@ -6,5 +6,5 @@ metadata:
 {{ include "chart.labels" . | indent 4 }}
 data:
   {{- range $key, $value := .Values.configmap }}
-    {{ $key }}: {{ $value | quote }}
+  {{ $key }}: {{ $value | quote }}
   {{- end }}

@@ -97,4 +97,4 @@ jobs:
       # deploy helm release
       - name: Deploy Helm release
         run: |
-          helm upgrade -i --kubeconfig kubeconfig.yml --wait $HELM_RELEASE_NAME kubernetes/ --set container.image.tag=${GITHUB_SHA::7}
+          helm upgrade -i --kubeconfig kubeconfig.yml --wait $HELM_RELEASE_NAME kubernetes/ --set container.image.tag=${GITHUB_SHA::7} --set configmap.BOT_WEBHOOK_PATH=$(uuidgen)
