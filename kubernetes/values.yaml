@@ -22,15 +22,19 @@ container:
   # probe:
   #   path: /health
 
-# service:
-#   type: ClusterIP
-#   port: 1919
+service:
+  type: ClusterIP
+  port: 80
 
 ingress:
-  enabled: false
-  annotations: []
-  host: ""
-  path: ""
+  enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+  host: "fip-telegram-bot.dixneuf19.me"
+  path: "/"
+  tls: true
 
 configmap: 
  FIP_API_HOST: "whats-on-fip"

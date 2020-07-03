@@ -33,5 +33,13 @@ updater.dispatcher.add_handler(CommandHandler("help", display_help))
 unknown_handler = MessageHandler(Filters.command, display_help)
 updater.dispatcher.add_handler(unknown_handler)
 
-updater.start_polling()
+# updater.start_polling()
+# updater.idle()
+
+
+# add handlers
+updater.start_webhook(listen="0.0.0.0",
+                      port=80   ,
+                      url_path="")
+updater.bot.set_webhook("https://fip-telegram-bot.dixneuf19.me/")
 updater.idle()
