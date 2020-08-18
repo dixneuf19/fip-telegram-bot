@@ -4,7 +4,7 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from dotenv import load_dotenv
 
-from src.fip import get_live, get_stations
+from src.fip import get_live, get_stations, get_api_status
 
 load_dotenv()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -30,6 +30,7 @@ updater = Updater(BOT_TELEGRAM_TOKEN, use_context=True)
 updater.dispatcher.add_handler(CommandHandler("whatsonFIP", get_live))
 updater.dispatcher.add_handler(CommandHandler("live", get_live))
 updater.dispatcher.add_handler(CommandHandler("stations", get_stations))
+updater.dispatcher.add_handler(CommandHandler("status", get_api_status))
 updater.dispatcher.add_handler(CommandHandler("help", display_help))
 unknown_handler = MessageHandler(Filters.command, display_help)
 updater.dispatcher.add_handler(unknown_handler)

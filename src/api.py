@@ -64,3 +64,11 @@ def search_on_spotify(query: str) -> Union[SimpleSong, None]:
     r.raise_for_status()
     return dict_to_track(r.json())
 
+def get_radio_france_api_status() -> str:
+    service_address = f"http://{FIP_API_HOST}:{FIP_API_PORT}/api-status"
+    logging.info(f"Fetching Radio France OpenAPI status")
+    r = requests.get(service_address)
+    if r.status_code == codes.ok:
+        return "Radio France OpenAPI is up"
+    else:
+        return f"Radio France OpenAPI is down with error code '{r.status_code}'"

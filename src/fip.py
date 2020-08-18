@@ -3,7 +3,7 @@ import logging
 from telegram import ParseMode
 from telegram.utils.helpers import escape_markdown
 
-from src.api import get_live_on_FIP, LiveFIPException, get_radio_france_stations, get_live_on_station
+from src.api import get_live_on_FIP, LiveFIPException, get_radio_france_stations, get_live_on_station, get_radio_france_api_status
 from src.spotify import get_song_from_spotify, generate_link_from_uri
 from src.utils import dict_to_simple_song
 from src.fmt import song_to_markdown, stations_to_markdown
@@ -52,7 +52,7 @@ def get_live(update, context):
         logging.error(e)
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Hum something went wrong...",
+            text="Hum something went wrong... Is the API live ? Try /status !",
             )
 
 def get_stations(update, context):
@@ -67,3 +67,14 @@ def get_stations(update, context):
             text=md,
             parse_mode=ParseMode.MARKDOWN_V2,
             )
+
+def get_api_status(update, context):
+    status_text = get_radio_france_api_status()
+
+    logging.info(status_text)
+
+    context.bod.send_message(
+        chat_id=update.effective_chat.id,
+        text=status_text,
+        parse_mode=ParseMode.MARKDOWN_V2,
+    )
