@@ -8,6 +8,7 @@ from src.spotify import get_song_from_spotify, generate_link_from_uri
 from src.utils import dict_to_simple_song
 from src.fmt import song_to_markdown, stations_to_markdown
 
+
 def get_live(update, context):
     try:
         # get the song from FIP
@@ -45,14 +46,14 @@ def get_live(update, context):
     except LiveFIPException:
          context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=escape_markdown("The FIP API cannot inform us about the live, is it _Club Jazzafip_ ?"),
+            text=escape_markdown("No live song information right now, is it ", version=2) + "_Club Jazzafip_" + escape_markdown(" ?", version=2),
             parse_mode=ParseMode.MARKDOWN_V2,
             )
     except Exception as e:
         logging.error(e)
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Hum something went wrong... Is the API live ? Try /status !",
+            text=escape_markdown("Hum something went wrong... Is the API live ? Try /status !", version=2),
             )
 
 def get_stations(update, context):
@@ -73,8 +74,8 @@ def get_api_status(update, context):
 
     logging.info(status_text)
 
-    context.bod.send_message(
+    context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=status_text,
+        text=escape_markdown(status_text, version=2)    ,
         parse_mode=ParseMode.MARKDOWN_V2,
     )
