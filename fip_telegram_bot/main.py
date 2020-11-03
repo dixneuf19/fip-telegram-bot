@@ -4,11 +4,12 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from dotenv import load_dotenv
 
-from src.fip import get_live, get_stations, get_api_status
+from fip_telegram_bot.fip import get_live, get_stations, get_api_status
 
 load_dotenv()
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                     level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 
 BOT_TELEGRAM_TOKEN = os.getenv("BOT_TELEGRAM_TOKEN")
 BOT_WEBHOOK_PATH = os.getenv("BOT_WEBHOOK_PATH")
@@ -40,8 +41,6 @@ updater.dispatcher.add_handler(unknown_handler)
 
 
 # add handlers
-updater.start_webhook(listen="0.0.0.0",
-                      port=80   ,
-                      url_path=BOT_WEBHOOK_PATH)
+updater.start_webhook(listen="0.0.0.0", port=80, url_path=BOT_WEBHOOK_PATH)
 updater.bot.set_webhook(f"https://fip-telegram-bot.dixneuf19.me/{BOT_WEBHOOK_PATH}")
 updater.idle()

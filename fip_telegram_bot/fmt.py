@@ -2,7 +2,8 @@ from typing import List
 
 from telegram.utils.helpers import escape_markdown
 
-from src.models import SimpleSong, Station
+from fip_telegram_bot.models import SimpleSong, Station
+
 
 def song_to_markdown(song: SimpleSong) -> str:
     md = "*Live on [FIP](https://www.fip.fr) :*\n\n"
@@ -18,10 +19,11 @@ def song_to_markdown(song: SimpleSong) -> str:
 
     return md
 
+
 def stations_to_markdown(stations: List[Station]) -> str:
     md = "*Stations Radio France :*\n\n"
 
     for station in stations:
         md += f"{escape_markdown(station.name, version=2)}\n"
-    
+
     return md
