@@ -2,15 +2,31 @@
 
 DOCKER_REPOSITERY=dixneuf19
 IMAGE_NAME=fip-telegram-bot
-IMAGE_TAG=$(shell git rev-parse --short HEAD)
+IMAGE_TAG=$(shell git rev-parse HEAD)
 DOCKER_IMAGE_PATH=$(DOCKER_REPOSITERY)/$(IMAGE_NAME):$(IMAGE_TAG)
 APP_NAME=fip-telegram-bot
+KUBE_NAMESPACE=fip
 
 dev:
-	PYTHONPATH=. python src/main.py
+	PYTHONPATH=. python fip_telegram_bot/main.py
+
+format:
+	black .
+
+check-format:
+	black --check .
+
+test:
+	PYTHONPATH=. pytest tests
 
 build:
 	docker build -t $(DOCKER_IMAGE_PATH) .
+
+build-multi:
+	docker buildx build --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 -t $(DOCKER_IMAGE_PATH) .
+
+run: build
+	docker run -p 8000:80 --env-file=.env $(DOCKER_IMAGE_PATH)
 
 push:
 	docker push $(DOCKER_IMAGE_PATH)
@@ -24,4 +40,7 @@ deploy:
 	kubectl apply -f $(APP_NAME).yaml
 
 secret:
-	kubectl create secret generic fip-telegram-bot --from-env-file=.env
+	kubectl create secret generic fip-telegram-bot --from-env-file=.env	
+
+kube-credentials:
+	NAMESPACE=${KUBE_NAMESPACE} ./scripts/generate-kubeconfig.sh

@@ -1,12 +1,12 @@
 from typing import List, Union
 
-from src.api import search_on_spotify
-from src.models import SimpleSong, Track
+from fip_telegram_bot.api import search_on_spotify
+from fip_telegram_bot.models import SimpleSong, Track
 
 
 def generate_queries(song: SimpleSong) -> List[str]:
-    short_title = ' '.join(song.title.split()[:2]) if song.title is not None else ''
-    short_artist = ' '.join(song.artist.split()[:2]) if song.artist is not None else ''
+    short_title = " ".join(song.title.split()[:2]) if song.title is not None else ""
+    short_artist = " ".join(song.artist.split()[:2]) if song.artist is not None else ""
     queries = {
         "full_query": f"{song.title} {song.artist}",
         "short_query": f"{short_title} {short_artist}",
@@ -14,6 +14,7 @@ def generate_queries(song: SimpleSong) -> List[str]:
     }
 
     return list(queries.values())
+
 
 def get_song_from_spotify(song: SimpleSong) -> Union[Track, None]:
     track = None
@@ -23,6 +24,7 @@ def get_song_from_spotify(song: SimpleSong) -> Union[Track, None]:
         if track is not None:
             break
     return track
+
 
 def generate_link_from_uri(uri: str) -> str:
     ressource_type, ressource_id = uri.split(":")[-2:]
