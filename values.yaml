@@ -10,11 +10,7 @@ image:
 
 container:
   port: 80
-  probe:
-    liveness:
-      path: /health
-    readiness:
-      path: /health
+  probe: 
 
 resources:
   limits:
@@ -31,12 +27,15 @@ service:
 
 ingress:
   enabled: true
+  ingressClassName: traefik
   annotations: 
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/router.tls.certresolver: leresolver
     traefik.ingress.kubernetes.io/router.tls.domains.0.main: fip-telegram-bot.dixneuf19.me
-  host: "fip-telegram-bot.dixneuf19.me"
-  path: "/"
+  hosts: 
+  - host: "fip-telegram-bot.dixneuf19.me"
+    paths:
+      - path: "/"
   # tls: true
 
 configmap: 
