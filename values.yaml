@@ -29,14 +29,15 @@ ingress:
   enabled: true
   ingressClassName: traefik
   annotations: 
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.tls.certresolver: leresolver
-    traefik.ingress.kubernetes.io/router.tls.domains.0.main: fip-telegram-bot.dixneuf19.me
+    cert-manager.io/cluster-issuer: letsencrypt
   hosts: 
   - host: "fip-telegram-bot.dixneuf19.me"
     paths:
       - path: "/"
-  # tls: true
+  tls:
+    - hosts:
+      - "fip-telegram-bot.dixneuf19.me"
+      secretName: fip-telegram-bot-dixneuf19-me-tls
 
 configmap: 
  FIP_API_HOST: "whats-on-fip"
