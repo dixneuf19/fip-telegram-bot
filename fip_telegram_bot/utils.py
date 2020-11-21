@@ -1,12 +1,12 @@
 import logging
 from typing import Dict, Any
 
-from fip_telegram_bot.models import SimpleSong, Artist, Image, Album, Track, Station
+from fip_telegram_bot.models import Song, Artist, Image, Album, Track, Station
 
 
-def dict_to_simple_song(obj: Dict[str, Any]) -> SimpleSong:
+def dict_to_simple_song(obj: Dict[str, Any]) -> Song:
     try:
-        return SimpleSong(
+        return Song(
             title=obj["title"],  # mandatory
             album=obj["album"] if "album" in obj else None,
             artist=obj["artist"],  # mandatory

@@ -1,10 +1,10 @@
 from typing import List, Union
 
 from fip_telegram_bot.api import search_on_spotify
-from fip_telegram_bot.models import SimpleSong, Track
+from fip_telegram_bot.models import Song, Track
 
 
-def generate_queries(song: SimpleSong) -> List[str]:
+def generate_queries(song: Song) -> List[str]:
     short_title = " ".join(song.title.split()[:2]) if song.title is not None else ""
     short_artist = " ".join(song.artist.split()[:2]) if song.artist is not None else ""
     queries = {
@@ -16,7 +16,7 @@ def generate_queries(song: SimpleSong) -> List[str]:
     return list(queries.values())
 
 
-def get_song_from_spotify(song: SimpleSong) -> Union[Track, None]:
+def get_song_from_spotify(song: Song) -> Union[Track, None]:
     track = None
     queries = generate_queries(song)
     for q in queries:

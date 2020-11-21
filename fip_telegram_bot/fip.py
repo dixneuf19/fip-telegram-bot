@@ -16,6 +16,11 @@ from fip_telegram_bot.fmt import song_to_markdown, stations_to_markdown
 
 
 def get_live(update, context):
+    logging.info(context)
+    logging.info(type(update.message))
+    logging.info(
+        f"Got '{update.message.text}' from {update.message.from_user.username} in {update.message.chat.title}"
+    )
     try:
         # get the song from FIP
         args = context.args
@@ -24,7 +29,6 @@ def get_live(update, context):
         else:
             station_name = args[0]
             song = get_live_on_station(station_name)
-        # song = dict_to_simple_song({"title": "Mango meat", "artist": "Mandrill"})
 
         context.bot.send_message(
             chat_id=update.effective_chat.id,
@@ -33,14 +37,37 @@ def get_live(update, context):
             disable_web_page_preview=True,
         )
 
-        # search the song on spotify
+        for song_provider in ["spotify", "youtube", "deezer"]:  # , "itunes"]:
+            if song_provider in song.external_urls.keys():
+                msg = f"""Found this on {song_provider.title()} :\n\n{song.external_urls[song_provider]}"""
+
+                context.bot.send_message(
+                    chat_id=update.effective_chat.id,
+                    text=msg,
+                )
+                return
+
+        # otherwise search the song on spotify
         spotify_track = get_song_from_spotify(song)
         if spotify_track is None:
+
+            if "itunes" in song.external_urls.keys():
+                msg = (
+                    f"""Found this on {"iTunes"} :\n\n{song.external_urls["itunes"]}"""
+                )
+
+                context.bot.send_message(
+                    chat_id=update.effective_chat.id,
+                    text=msg,
+                )
+                return
+
             context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text="Not found on spotify",
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
+
         else:
             spot_txt = f"""Found this on Spotify :\n\n{generate_link_from_uri(spotify_track.uri)}"""
 
@@ -66,6 +93,7 @@ def get_live(update, context):
             text=escape_markdown(
                 "Hum something went wrong... Is the API live ? Try /status !", version=2
             ),
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
 
@@ -74,7 +102,7 @@ def get_stations(update, context):
 
     md = stations_to_markdown(stations)
 
-    logging.info(md)
+    logging.debug(md)
 
     context.bot.send_message(
         chat_id=update.effective_chat.id,

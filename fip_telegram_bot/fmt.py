@@ -2,10 +2,10 @@ from typing import List
 
 from telegram.utils.helpers import escape_markdown
 
-from fip_telegram_bot.models import SimpleSong, Station
+from fip_telegram_bot.models import Song, Station
 
 
-def song_to_markdown(song: SimpleSong) -> str:
+def song_to_markdown(song: Song) -> str:
     md = "*Live on [FIP](https://www.fip.fr) :*\n\n"
 
     md += "*" + escape_markdown(song.title, version=2) + "*\n"

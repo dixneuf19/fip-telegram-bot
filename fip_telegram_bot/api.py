@@ -5,8 +5,8 @@ from requests import codes
 from dotenv import load_dotenv
 from typing import Union, List
 
-from fip_telegram_bot.models import SimpleSong, Track, Station
-from fip_telegram_bot.utils import dict_to_track, dict_to_simple_song, dict_to_station
+from fip_telegram_bot.models import Song, Track, Station
+from fip_telegram_bot.utils import dict_to_track, Song, dict_to_station
 
 load_dotenv()
 
@@ -21,12 +21,12 @@ class LiveFIPException(Exception):
     pass
 
 
-def get_live_on_FIP() -> SimpleSong:
+def get_live_on_FIP() -> Song:
     service_address = f"http://{FIP_API_HOST}:{FIP_API_PORT}/live"
     logging.info(f"Fetching live info from {service_address}")
     r = requests.get(service_address)
     if r.status_code == codes.ok:
-        return dict_to_simple_song(r.json())
+        return Song(**r.json())
     elif r.status_code == codes.no_content:
         logging.warning(f"FIP API is up but is unable to fetch the live")
         raise LiveFIPException()
@@ -34,14 +34,14 @@ def get_live_on_FIP() -> SimpleSong:
     r.raise_for_status()
 
 
-def get_live_on_station(station_name: str) -> SimpleSong:
+def get_live_on_station(station_name: str) -> Song:
     service_address = (
         f"http://{FIP_API_HOST}:{FIP_API_PORT}/live?station={station_name}"
     )
     logging.info(f"Fetching live info from {service_address}")
     r = requests.get(service_address)
     if r.status_code == codes.ok:
-        return dict_to_simple_song(r.json())
+        return Song(**r.json())
     elif r.status_code == codes.no_content:
         logging.warning(f"Radio France API is up but is unable to fetch the live")
         raise LiveFIPException()
@@ -54,12 +54,12 @@ def get_radio_france_stations() -> List[Station]:
     logging.info(f"Fetching Radio France stations from {service_address}")
     r = requests.get(service_address)
     if r.status_code == codes.ok:
-        return [dict_to_station(e) for e in r.json()]
+        return [Station(**e) for e in r.json()]
     else:
         r.raise_for_status()
 
 
-def search_on_spotify(query: str) -> Union[SimpleSong, None]:
+def search_on_spotify(query: str) -> Union[Track, None]:
     logging.info(f"search for '{query}' on Spotify API")
     service_address = f"http://{SPOTIFY_API_HOST}:{SPOTIFY_API_PORT}/search"
     payload = {"q": query}
@@ -68,7 +68,7 @@ def search_on_spotify(query: str) -> Union[SimpleSong, None]:
         logging.warning(f"no song found on Spotify with query '{query}'")
         return None
     r.raise_for_status()
-    return dict_to_track(r.json())
+    return Track(**r.json())
 
 
 def get_radio_france_api_status() -> str:
