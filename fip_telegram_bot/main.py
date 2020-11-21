@@ -14,6 +14,8 @@ logging.basicConfig(
 BOT_TELEGRAM_TOKEN = os.getenv("BOT_TELEGRAM_TOKEN")
 BOT_WEBHOOK_PATH = os.getenv("BOT_WEBHOOK_PATH")
 
+USE_POLLING = os.getenv("USE_POLLING") in ("True", "true", "1")
+
 
 def display_help(update, context):
     help_message = """
@@ -36,11 +38,13 @@ updater.dispatcher.add_handler(CommandHandler("help", display_help))
 unknown_handler = MessageHandler(Filters.command, display_help)
 updater.dispatcher.add_handler(unknown_handler)
 
-# updater.start_polling()
-# updater.idle()
+if USE_POLLING:
+    updater.start_polling()
+    logging.info("Start polling")
+    updater.idle()
 
-
-# add handlers
-updater.start_webhook(listen="0.0.0.0", port=80, url_path=BOT_WEBHOOK_PATH)
-updater.bot.set_webhook(f"https://fip-telegram-bot.dixneuf19.me/{BOT_WEBHOOK_PATH}")
-updater.idle()
+else:
+    # add handlers
+    updater.start_webhook(listen="0.0.0.0", port=80, url_path=BOT_WEBHOOK_PATH)
+    updater.bot.set_webhook(f"https://fip-telegram-bot.dixneuf19.me/{BOT_WEBHOOK_PATH}")
+    updater.idle()
