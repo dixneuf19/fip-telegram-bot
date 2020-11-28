@@ -2,20 +2,20 @@ from typing import List
 
 from telegram.utils.helpers import escape_markdown
 
-from fip_telegram_bot.models import Song, Station
+from fip_telegram_bot.models import Track, Station
 
 
-def song_to_markdown(song: Song) -> str:
+def track_to_markdown(track: Track) -> str:
     md = "*Live on [FIP](https://www.fip.fr) :*\n\n"
 
-    md += "*" + escape_markdown(song.title, version=2) + "*\n"
-    md += "_" + escape_markdown(song.artist, version=2) + "_\n"
-    if song.album is not None:
-        md += escape_markdown(song.album, version=2)
-    if song.album is not None and song.year is not None:
+    md += "*" + escape_markdown(track.title, version=2) + "*\n"
+    md += "_" + escape_markdown(track.artist, version=2) + "_\n"
+    if track.album is not None:
+        md += escape_markdown(track.album, version=2)
+    if track.album is not None and track.year is not None:
         md += f" \- "
-    if song.year is not None:
-        md += escape_markdown(str(song.year), version=2)
+    if track.year is not None:
+        md += escape_markdown(str(track.year), version=2)
 
     return md
 
