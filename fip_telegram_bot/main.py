@@ -23,7 +23,10 @@ This bot helps you share your love of FIP !
 
 Commands :
 /whatsonFIP - Display the current song played on FIP, and search for it on Spotify. Doesn't work during shows such Jazzafip
-/live <RADIO_FRANCE_STATION>
+/live <RADIO_FRANCE_STATION> - Get track currently live on the station specified. Default to FIP station
+/stations - List availables RadioFrance stations. Be aware that this bot mostly works with main FIP station
+/status - Get the current status of RadioFrance OpenAPI. Might help to explain when the bot is broken.
+/help - Print this message 
     """
     update.message.reply_text(help_message)
 

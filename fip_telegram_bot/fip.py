@@ -4,79 +4,57 @@ from telegram import ParseMode
 from telegram.utils.helpers import escape_markdown
 
 from fip_telegram_bot.api import (
-    get_live_on_FIP,
     LiveFIPException,
     get_radio_france_stations,
     get_live_on_station,
     get_radio_france_api_status,
 )
-from fip_telegram_bot.spotify import get_song_from_spotify, generate_link_from_uri
-from fip_telegram_bot.utils import dict_to_simple_song
-from fip_telegram_bot.fmt import song_to_markdown, stations_to_markdown
+from fip_telegram_bot.fmt import track_to_markdown, stations_to_markdown
 
 
 def get_live(update, context):
-    logging.info(context)
-    logging.info(type(update.message))
+    update_message = update.message
     logging.info(
-        f"Got '{update.message.text}' from {update.message.from_user.username} in {update.message.chat.title}"
+        f"Got '{update_message.text}' from {update_message.from_user.username} in {update_message.chat.title}"
     )
     try:
-        # get the song from FIP
+        # 1. get the track from FIP
         args = context.args
         if len(args) == 0:
-            song = get_live_on_station("FIP")
+            track = get_live_on_station("FIP")
         else:
             station_name = args[0]
-            song = get_live_on_station(station_name)
+            track = get_live_on_station(station_name)
 
+        logging.info(f"Found this song live: {str(track)}")
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=song_to_markdown(song),
+            text=track_to_markdown(track),
             parse_mode=ParseMode.MARKDOWN_V2,
             disable_web_page_preview=True,
         )
 
-        for song_provider in ["spotify", "youtube", "deezer"]:  # , "itunes"]:
-            if song_provider in song.external_urls.keys():
-                msg = f"""Found this on {song_provider.title()} :\n\n{song.external_urls[song_provider]}"""
+        # 2. send a link with the music
 
+        for track_provider in ["spotify", "youtube", "deezer", "itunes"]:
+            if track_provider in track.external_urls.keys():
+                msg = f"""Found this on {track_provider.title()} !\n\n{track.external_urls[track_provider]}"""
+                logging.info(msg.replace("\n", " "))
                 context.bot.send_message(
                     chat_id=update.effective_chat.id,
                     text=msg,
                 )
                 return
 
-        # otherwise search the song on spotify
-        spotify_track = get_song_from_spotify(song)
-        if spotify_track is None:
-
-            if "itunes" in song.external_urls.keys():
-                msg = (
-                    f"""Found this on {"iTunes"} :\n\n{song.external_urls["itunes"]}"""
-                )
-
-                context.bot.send_message(
-                    chat_id=update.effective_chat.id,
-                    text=msg,
-                )
-                return
-
-            context.bot.send_message(
-                chat_id=update.effective_chat.id,
-                text="Not found on spotify",
-                parse_mode=ParseMode.MARKDOWN_V2,
-            )
-
-        else:
-            spot_txt = f"""Found this on Spotify :\n\n{generate_link_from_uri(spotify_track.uri)}"""
-
-            context.bot.send_message(
-                chat_id=update.effective_chat.id,
-                text=spot_txt,
-            )
+        logging.info("No external urls found")
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Not found on Spotify 😢",
+            parse_mode=ParseMode.MARKDOWN_V2,
+        )
 
     except LiveFIPException:
+        logging.info("No track information available right now")
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=escape_markdown(
@@ -91,18 +69,21 @@ def get_live(update, context):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=escape_markdown(
-                "Hum something went wrong... Is the API live ? Try /status !", version=2
+                "Hum something went wrong... 😢 \nIs the API up ? Try /status and/or ping @dixneuf19 !",
+                version=2,
             ),
             parse_mode=ParseMode.MARKDOWN_V2,
         )
 
 
 def get_stations(update, context):
+    update_message = update.message
+    logging.info(
+        f"Got '{update_message.text}' from {update_message.from_user.username} in {update_message.chat.title}"
+    )
     stations = get_radio_france_stations()
 
     md = stations_to_markdown(stations)
-
-    logging.debug(md)
 
     context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -112,6 +93,10 @@ def get_stations(update, context):
 
 
 def get_api_status(update, context):
+    update_message = update.message
+    logging.info(
+        f"Got '{update_message.text}' from {update_message.from_user.username} in {update_message.chat.title}"
+    )
     status_text = get_radio_france_api_status()
 
     logging.info(status_text)
