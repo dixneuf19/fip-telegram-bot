@@ -6,6 +6,7 @@ IMAGE_TAG=$(shell git rev-parse HEAD)
 DOCKER_IMAGE_PATH=$(DOCKER_REPOSITERY)/$(IMAGE_NAME):$(IMAGE_TAG)
 APP_NAME=fip-telegram-bot
 KUBE_NAMESPACE=fip
+PLATFORMS="linux/amd64,linux/arm64"
 
 dev:
 	PYTHONPATH=. python fip_telegram_bot/main.py
@@ -23,7 +24,7 @@ build:
 	docker build -t $(DOCKER_IMAGE_PATH) .
 
 build-multi:
-	docker buildx build --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 -t $(DOCKER_IMAGE_PATH) .
+	docker buildx build --platform $(PLATFORMS) -t $(DOCKER_IMAGE_PATH) .
 
 run: build
 	docker run -p 8000:80 --env-file=.env $(DOCKER_IMAGE_PATH)
@@ -34,7 +35,7 @@ push:
 release: build push
 
 release-multi:
-	docker buildx build --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7 -t $(DOCKER_IMAGE_PATH) . --push
+	docker buildx build --platform $(PLATFORMS) -t $(DOCKER_IMAGE_PATH) . --push
 
 deploy:
 	kubectl apply -f $(APP_NAME).yaml
