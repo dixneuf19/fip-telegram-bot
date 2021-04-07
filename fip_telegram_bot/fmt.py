@@ -2,11 +2,14 @@ from typing import List
 
 from telegram.utils.helpers import escape_markdown
 
-from fip_telegram_bot.models import Track, Station
+from fip_telegram_bot.models import Track, Station, Radio
+
+FIP_RADIO = Radio(name="FIP", url="https://www.fip.fr")
+MEUH_RADIO = Radio(name="Radiomeuh", url="https://www.radiomeuh.com/")
 
 
-def track_to_markdown(track: Track) -> str:
-    md = "*Live on [FIP](https://www.fip.fr) :*\n\n"
+def track_to_markdown(track: Track, radio=FIP_RADIO) -> str:
+    md = f"*Live on [{radio.name}]({radio.url}) :*\n\n"
 
     md += "*" + escape_markdown(track.title, version=2) + "*\n"
     md += "_" + escape_markdown(track.artist, version=2) + "_\n"

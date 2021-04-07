@@ -15,3 +15,8 @@ class Track(BaseModel):
 
 class Station(BaseModel):
     name: str
+
+
+class Radio(BaseModel):
+    name: str
+    url: str
