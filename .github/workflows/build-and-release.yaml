@@ -72,7 +72,7 @@ jobs:
           files: '${{ env.INFRA_REPO_PATH }}/values.yaml'
         env:
           generic.image.tag: ${{ env.DOCKER_TAG }}
-          generic.configmap.BOT_WEBHOOK_PATH: $(uuidgen)
+          # generic.configmap.BOT_WEBHOOK_PATH: $(uuidgen)
 
       - name: Push the modification to the repo
         run: |
