@@ -12,7 +12,7 @@ env:
   DOCKER_REPOSITORY: dixneuf19
   DOCKER_TAG: ${{ github.sha}}
   DOCKER_IMAGE_NAME: fip-telegram-bot
-  TARGET_PLATFORMS: linux/amd64,linux/386,linux/arm64,linux/arm/v7
+  TARGET_PLATFORMS: linux/amd64,linux/arm64
   INFRA_REPO_URL: "dixneuf19/brassberry-kubernetes-cluster-state"
   INFRA_REPO_PATH: "fip/fip-telegram-bot"
 
