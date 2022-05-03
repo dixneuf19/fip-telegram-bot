@@ -6,6 +6,7 @@ from fip_telegram_bot.models import Track, Station, Radio
 
 FIP_RADIO = Radio(name="FIP", url="https://www.fip.fr")
 MEUH_RADIO = Radio(name="Radiomeuh", url="https://www.radiomeuh.com/")
+FIFTYFIFTY_RADIO = Radio(name="Radio5050", url="https://www.radio5050.com/")
 
 
 def track_to_markdown(track: Track, radio=FIP_RADIO) -> str:

@@ -60,3 +60,13 @@ def get_live_on_meuh() -> Track:
         return Track(**r.json())
 
     r.raise_for_status()
+
+
+def get_live_on_fiftyfifty() -> Track:
+    service_address = f"http://{FIP_API_HOST}:{FIP_API_PORT}/5050"
+    logging.info(f"Fetching live info from {service_address}")
+    r = requests.get(service_address)
+    if r.status_code == codes.ok:
+        return Track(**r.json())
+
+    r.raise_for_status()
