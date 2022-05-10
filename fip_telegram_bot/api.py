@@ -70,3 +70,13 @@ def get_live_on_fiftyfifty() -> Track:
         return Track(**r.json())
 
     r.raise_for_status()
+
+
+def get_live_on_feelgood() -> Track:
+    service_address = f"http://{FIP_API_HOST}:{FIP_API_PORT}/feelgood"
+    logging.info(f"Fetching live info from {service_address}")
+    r = requests.get(service_address)
+    if r.status_code == codes.ok:
+        return Track(**r.json())
+
+    r.raise_for_status()
