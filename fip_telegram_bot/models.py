@@ -13,10 +13,6 @@ class Track(BaseModel):
     external_urls: Dict[str, str] = {}
 
 
-class Station(BaseModel):
-    name: str
-
-
 class Radio(BaseModel):
     name: str
     url: str

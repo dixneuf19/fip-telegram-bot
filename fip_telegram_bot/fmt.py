@@ -2,7 +2,7 @@ from typing import List
 
 from telegram.utils.helpers import escape_markdown
 
-from fip_telegram_bot.models import Track, Station, Radio
+from fip_telegram_bot.models import Track, Radio
 
 FIP_RADIO = Radio(name="FIP", url="https://www.fip.fr")
 MEUH_RADIO = Radio(name="Radiomeuh", url="https://www.radiomeuh.com/")
@@ -21,14 +21,5 @@ def track_to_markdown(track: Track, radio=FIP_RADIO) -> str:
         md += f" \- "
     if track.year is not None:
         md += escape_markdown(str(track.year), version=2)
-
-    return md
-
-
-def stations_to_markdown(stations: List[Station]) -> str:
-    md = "*Stations Radio France :*\n\n"
-
-    for station in stations:
-        md += f"{escape_markdown(station.name, version=2)}\n"
 
     return md

@@ -5,20 +5,19 @@ from telegram.utils.helpers import escape_markdown
 
 from fip_telegram_bot.api import (
     LiveFIPException,
-    get_radio_france_stations,
-    get_live_on_station,
-    get_radio_france_api_status,
+    get_live_on_FIP,
     get_live_on_meuh,
     get_live_on_fiftyfifty,
     get_live_on_feelgood,
 )
 from fip_telegram_bot.fmt import (
     track_to_markdown,
-    stations_to_markdown,
     MEUH_RADIO,
     FIFTYFIFTY_RADIO,
     FEELGOOD_RADIO,
 )
+
+ERROR_MESSAGE = """Hum something went wrong... 😢 \nPing @dixneuf19 !"""
 
 
 def get_live(update, context):
@@ -29,11 +28,7 @@ def get_live(update, context):
     try:
         # 1. get the track from FIP
         args = context.args
-        if len(args) == 0:
-            track = get_live_on_station("FIP")
-        else:
-            station_name = args[0]
-            track = get_live_on_station(station_name)
+        track = get_live_on_FIP()
 
         logging.info(f"Found this song live: {str(track)}")
         context.bot.send_message(
@@ -78,7 +73,7 @@ def get_live(update, context):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=escape_markdown(
-                "Hum something went wrong... 😢 \nIs the API up ? Try /status and/or ping @dixneuf19 !",
+                ERROR_MESSAGE,
                 version=2,
             ),
             parse_mode=ParseMode.MARKDOWN_V2,
@@ -126,7 +121,7 @@ def get_meuh(update, context):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=escape_markdown(
-                "Hum something went wrong... 😢 \nIs the API up ? Try /status and/or ping @dixneuf19 !",
+                ERROR_MESSAGE,
                 version=2,
             ),
             parse_mode=ParseMode.MARKDOWN_V2,
@@ -174,7 +169,7 @@ def get_fiftyfity(update, context):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=escape_markdown(
-                "Hum something went wrong... 😢 \nIs the API up ? Try /status and/or ping @dixneuf19 !",
+                ERROR_MESSAGE,
                 version=2,
             ),
             parse_mode=ParseMode.MARKDOWN_V2,
@@ -222,40 +217,8 @@ def get_feelgood(update, context):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=escape_markdown(
-                "Hum something went wrong... 😢 \nIs the API up ? Try /status and/or ping @dixneuf19 !",
+                ERROR_MESSAGE,
                 version=2,
             ),
             parse_mode=ParseMode.MARKDOWN_V2,
         )
-
-
-def get_stations(update, context):
-    update_message = update.message
-    logging.info(
-        f"Got '{update_message.text}' from {update_message.from_user.username} in {update_message.chat.title}"
-    )
-    stations = get_radio_france_stations()
-
-    md = stations_to_markdown(stations)
-
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=md,
-        parse_mode=ParseMode.MARKDOWN_V2,
-    )
-
-
-def get_api_status(update, context):
-    update_message = update.message
-    logging.info(
-        f"Got '{update_message.text}' from {update_message.from_user.username} in {update_message.chat.title}"
-    )
-    status_text = get_radio_france_api_status()
-
-    logging.info(status_text)
-
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=escape_markdown(status_text, version=2),
-        parse_mode=ParseMode.MARKDOWN_V2,
-    )
