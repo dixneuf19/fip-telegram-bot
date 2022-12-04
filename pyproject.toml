@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "fip-telegram-bot"
+version = "0.1.0"
+description = ""
+authors = ["dixneuf19"]
+readme = "README.md"
+packages = [{include = "fip_telegram_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
