@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 from fip_telegram_bot.fip import (
     get_feelgood,
     get_live,
-    get_stations,
-    get_api_status,
     get_meuh,
     get_fiftyfity,
 )
@@ -26,14 +24,15 @@ USE_POLLING = os.getenv("USE_POLLING") in ("True", "true", "1")
 
 def display_help(update, context):
     help_message = """
-This bot helps you share your love of FIP !
+This bot helps you share your love of FIP and other radios! 
 
-Commands :
-/whatsonFIP - Display the current song played on FIP, and search for it on Spotify. Doesn't work during shows such Jazzafip
-/live <RADIO_FRANCE_STATION> - Get track currently live on the station specified. Default to FIP station
-/stations - List availables RadioFrance stations. Be aware that this bot mostly works with main FIP station
-/status - Get the current status of RadioFrance OpenAPI. Might help to explain when the bot is broken.
-/help - Print this message 
+It tries to fetch the live of the radio you are listening to and share it with your friends. It also adds a link to the song on Spotify.
+
+The following radios are supported:
+FIP - /live /whatsonFIP
+RadioMeuh - /meuh
+Radio5050 - /5050
+FeelGood - /feelgood /fg
     """
     update.message.reply_text(help_message)
 
@@ -46,8 +45,6 @@ updater.dispatcher.add_handler(CommandHandler("meuh", get_meuh))
 updater.dispatcher.add_handler(CommandHandler("5050", get_fiftyfity))
 updater.dispatcher.add_handler(CommandHandler("feelgood", get_feelgood))
 updater.dispatcher.add_handler(CommandHandler("fg", get_feelgood))
-updater.dispatcher.add_handler(CommandHandler("stations", get_stations))
-updater.dispatcher.add_handler(CommandHandler("status", get_api_status))
 updater.dispatcher.add_handler(CommandHandler("help", display_help))
 unknown_handler = MessageHandler(Filters.command, display_help)
 updater.dispatcher.add_handler(unknown_handler)
