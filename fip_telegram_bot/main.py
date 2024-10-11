@@ -57,5 +57,5 @@ if USE_POLLING:
 else:
     # add handlers
     updater.start_webhook(listen="0.0.0.0", port=80, url_path=BOT_WEBHOOK_PATH)
-    updater.bot.set_webhook(f"https://fip-telegram-bot.dixneuf19.me/{BOT_WEBHOOK_PATH}")
+    updater.bot.set_webhook(f"https://fip-telegram-bot.dixneuf19.fr/{BOT_WEBHOOK_PATH}")
     updater.idle()

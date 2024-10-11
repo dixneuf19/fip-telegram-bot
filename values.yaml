@@ -31,13 +31,13 @@ ingress:
   annotations: 
     cert-manager.io/cluster-issuer: letsencrypt
   hosts: 
-  - host: "fip-telegram-bot.dixneuf19.me"
+  - host: "fip-telegram-bot.dixneuf19.fr"
     paths:
       - path: "/"
   tls:
     - hosts:
-      - "fip-telegram-bot.dixneuf19.me"
-      secretName: fip-telegram-bot-dixneuf19-me-tls
+      - "fip-telegram-bot.dixneuf19.fr"
+      secretName: fip-telegram-bot-dixneuf19-fr-tls
 
 configmap: 
  FIP_API_HOST: "whats-on-fip"
